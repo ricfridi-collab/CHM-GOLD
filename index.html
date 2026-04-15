@@ -8,13 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel+Decorative:wght@700&family=Reem+Kufi:wght@400;700&family=Times+New+Roman&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* تنسيقات شاشة التفعيل */
         :root {
             --vert-bouteille: #004d40; 
             --gold: #D4AF37; 
@@ -70,10 +67,7 @@
             width: 100%;
         }
 
-        .btn-activate:hover { background: #fff; }
         .loading-spinner { display: none; margin-top: 15px; color: var(--gold); }
-
-        /* إخفاء المحتوى الأصلي حتى التفعيل */
         #main-content { display: none; }
     </style>
 </head>
@@ -83,9 +77,9 @@
         <div class="login-card">
             <i class="fas fa-shield-alt"></i>
             <h2>تفعيل الدخول</h2>
-            <p style="color: #ccc;">أدخل كود التفعيل الخاص بك للوصول للمنصة</p>
+            <p style="color: #ccc;">أدخل كود التفعيل الخاص بك</p>
             <input type="text" id="activationCode" placeholder="CHM-26-XXXX">
-            <button class="btn-activate" onclick="validateCode()">تفعيل الآن</button>
+            <button class="btn-activate" onclick="validateCode()">دخول</button>
             <div id="spinner" class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> جاري التحقق...</div>
             <p id="error-msg" style="color: #ff5252; margin-top: 15px; font-weight: bold;"></p>
         </div>
@@ -96,95 +90,20 @@
             <div class="main-title">فالنجمع الخيرين معا </div>
             <div class="signature">Designed by Dr.Chouidira Mohamed</div>
         </header>
-
-        <div class="countdown-container">
-            <div style="margin-bottom:5px; color:var(--gold)">الموعد: 21 ماي 2026</div>
-            <div class="timer-display" id="countdown">
-                <div class="time-unit">-- <span>يوم</span></div>
-                <div class="time-unit">-- <span>ساعة</span></div>
-                <div class="time-unit">-- <span>دقيقة</span></div>
-            </div>
         </div>
-
-        <section class="problems-section">
-            <div class="section-title"><i class="fas fa-lightbulb"></i> حلول للمشاكل الشائعة</div>
-            <div class="icon-grid">
-                <div class="problem-card" onclick="showAdvice('stress')">
-                    <i class="fas fa-heartbeat"></i>
-                    <span>قلق الامتحان</span>
-                </div>
-                <div class="problem-card" onclick="showAdvice('focus')">
-                    <i class="fas fa-distracted"></i>
-                    <span>ضعف التركيز</span>
-                </div>
-                <div class="problem-card" onclick="showAdvice('forget')">
-                    <i class="fas fa-brain"></i>
-                    <span>النسيان</span>
-                </div>
-                <div class="problem-card" onclick="showAdvice('lazy')">
-                    <i class="fas fa-couch"></i>
-                    <span>الكسل</span>
-                </div>
-                <div class="problem-card" onclick="showAdvice('time')">
-                    <i class="fas fa-clock"></i>
-                    <span>إدارة الوقت</span>
-                </div>
-                <div class="problem-card" onclick="showAdvice('fear')">
-                    <i class="fas fa-ghost"></i>
-                    <span>الخوف من الرسوب</span>
-                </div>
-            </div>
-            <div id="adviceDisplay" class="advice-box">
-                اضغط على أحد الأيقونات أعلاه لعرض الحل المقترح ...
-            </div>
-        </section>
-
-        <section class="exam-section">
-            <div class="section-title"><i class="fas fa-file-alt"></i> قاعة الامتحانات</div>
-            <div class="controls">
-                <select id="subjectSelect">
-                    <option value="math">الرياضيات</option>
-                    <option value="science">العلوم الطبيعية</option>
-                    <option value="physics">الفيزياء</option>
-                    <option value="islamic">العلوم الإسلامية</option>
-                    <option value="civic">التربية المدنية</option>
-                    <option value="french">اللغة الفرنسية</option>
-                    <option value="english">اللغة الإنجليزية</option>
-                    <option value="arabic">اللغة العربية</option>
-                    <option value="history">الاجتماعيات</option>
-                </select>
-                <button class="btn-main" onclick="generateExam()">توليد</button>
-            </div>
-            <div id="examContainer">
-                <div style="text-align:center; padding:40px; color:#666;">
-                    <i class="fas fa-graduation-cap" style="font-size:3rem; margin-bottom:10px;"></i>
-                    <p>اختر المادة واضغط توليد للبدء</p>
-                </div>
-            </div>
-            <div id="evaluationArea" class="eval-area">
-                <label>تقييمك للأداء (من 10):</label>
-                <input type="range" min="1" max="10" value="5" style="width:100%; accent-color: var(--gold)" oninput="this.nextElementSibling.value = this.value">
-                <output>5</output>
-                <br><br>
-                <label>ملاحظات الضعف:</label>
-                <textarea id="notes" rows="3" placeholder="مثال: صعوبة في الجذور..."></textarea>
-                <button class="btn-main" style="width:100%; margin-top:10px;" onclick="saveEval()">حفظ التقرير</button>
-            </div>
-        </section>
-    </div>
 
     <script>
         const API_URL = "https://sheetdb.io/api/v1/t3mym6k81l33y";
 
         window.onload = function() {
-            // التحقق إذا كان الجهاز مفعل مسبقاً
-            if (localStorage.getItem('platform_active') === 'true') {
+            if (localStorage.getItem('app_verified') === 'true') {
                 showMainContent();
             }
         };
 
         function getDeviceID() {
-            return btoa(navigator.userAgent + screen.width).slice(0, 16);
+            // توليد بصمة أكثر دقة للجهاز
+            return btoa(navigator.userAgent + screen.width + screen.height).slice(0, 20);
         }
 
         async function validateCode() {
@@ -193,7 +112,7 @@
             const spinner = document.getElementById('spinner');
 
             if (!codeInput) {
-                errorMsg.innerText = "الرجاء إدخال الكود";
+                errorMsg.innerText = "يرجى إدخال الكود";
                 return;
             }
 
@@ -201,46 +120,56 @@
             spinner.style.display = "block";
 
             try {
-                const response = await fetch(API_URL);
-                const data = await response.json();
-                const record = data.find(item => item.code === codeInput);
+                // طلب الكود المحدد فقط من SheetDB لزيادة الدقة
+                const response = await fetch(`${API_URL}/search?code=${codeInput}`);
+                const results = await response.json();
+                
+                if (results.length > 0) {
+                    const record = results[0];
+                    const currentDevice = getDeviceID();
 
-                if (record) {
-                    const devID = getDeviceID();
-
-                    // أكواد المسؤول (Admin)
+                    // 1. استثناء أكواد المسؤول (Admin)
                     if (codeInput.includes("MASTER-2026") || codeInput.includes("ROOT-88")) {
                         grantAccess();
                         return;
                     }
 
-                    // التفعيل لمرة واحدة
+                    // 2. التحقق: هل الكود فارغ (جديد)؟
                     if (!record.status || record.status === "" || record.status === "active") {
-                        await fetch(`${API_URL}/code/${codeInput}`, {
+                        // تحديث الشيت ببصمة الجهاز الحالية فوراً
+                        const updateResponse = await fetch(`${API_URL}/code/${codeInput}`, {
                             method: 'PATCH',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ "status": devID })
+                            body: JSON.stringify({ "status": currentDevice })
                         });
+
+                        if (updateResponse.ok) {
+                            grantAccess();
+                        } else {
+                            errorMsg.innerText = "خطأ في تسجيل التفعيل. حاول مجدداً.";
+                        }
+                    } 
+                    // 3. التحقق: هل بصمة الجهاز المسجلة تطابق الجهاز الحالي؟
+                    else if (record.status === currentDevice) {
                         grantAccess();
                     } 
-                    else if (record.status === devID) {
-                        grantAccess();
-                    } 
+                    // 4. الكود مستخدم من قبل جهاز آخر
                     else {
-                        errorMsg.innerText = "هذا الكود مفعل مسبقاً على جهاز آخر!";
+                        errorMsg.innerText = "عذراً! هذا الكود تم تفعيله مسبقاً على جهاز آخر.";
                     }
                 } else {
-                    errorMsg.innerText = "الكود غير صحيح!";
+                    errorMsg.innerText = "الكود الذي أدخلته غير موجود.";
                 }
             } catch (e) {
-                errorMsg.innerText = "خطأ في الاتصال بالخادم!";
+                errorMsg.innerText = "خطأ في الاتصال بالقاعدة. تأكد من الإنترنت.";
+                console.error(e);
             } finally {
                 spinner.style.display = "none";
             }
         }
 
         function grantAccess() {
-            localStorage.setItem('platform_active', 'true');
+            localStorage.setItem('app_verified', 'true');
             showMainContent();
         }
 
@@ -249,7 +178,6 @@
             document.getElementById('main-content').style.display = 'block';
         }
     </script>
-
     <script src="script.js"></script>
 </body>
 </html>
