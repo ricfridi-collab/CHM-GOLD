@@ -8,7 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel+Decorative:wght@700&family=Reem+Kufi:wght@400;700&family=Times+New+Roman&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <link rel="stylesheet" href="style.css">
 
     <style>
@@ -18,6 +20,7 @@
             --black: #0a0a0a;
         }
 
+        /* تنسيقات شاشة التفعيل */
         #activation-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -33,8 +36,7 @@
             border-radius: 20px;
             border: 1px solid var(--gold);
             text-align: center;
-            max-width: 400px;
-            width: 90%;
+            max-width: 400px; width: 90%;
             backdrop-filter: blur(10px);
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
         }
@@ -43,31 +45,22 @@
         .login-card h2 { font-family: 'Reem Kufi', sans-serif; color: #fff; margin-bottom: 15px; }
         
         #activationCode {
-            width: 100%;
-            padding: 12px;
-            margin: 20px 0;
+            width: 100%; padding: 12px; margin: 20px 0;
             background: rgba(255,255,255,0.1);
             border: 1px solid var(--gold);
-            border-radius: 8px;
-            color: #fff;
-            text-align: center;
-            font-size: 18px;
-            outline: none;
+            border-radius: 8px; color: #fff;
+            text-align: center; font-size: 18px; outline: none;
         }
 
         .btn-activate {
-            background: var(--gold);
-            color: #000;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
+            background: var(--gold); color: #000; border: none;
+            padding: 12px 30px; border-radius: 8px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%;
         }
 
         .loading-spinner { display: none; margin-top: 15px; color: var(--gold); }
+        
+        /* إخفاء المحتوى الرئيسي حتى يتم التحقق */
         #main-content { display: none; }
     </style>
 </head>
@@ -75,11 +68,11 @@
 
     <div id="activation-screen">
         <div class="login-card">
-            <i class="fas fa-shield-alt"></i>
-            <h2>تفعيل الدخول</h2>
-            <p style="color: #ccc;">أدخل كود التفعيل الخاص بك</p>
-            <input type="text" id="activationCode" placeholder="CHM-26-XXXX">
-            <button class="btn-activate" onclick="validateCode()">دخول</button>
+            <i class="fas fa-user-shield"></i>
+            <h2>تفعيل النسخة الشخصية</h2>
+            <p style="color: #ccc;">هذا الكود صالح لجهاز واحد فقط</p>
+            <input type="text" id="activationCode" placeholder="أدخل كود التفعيل (CHM-26-XXXX)">
+            <button class="btn-activate" onclick="validateAndLock()">تفعيل الدخول</button>
             <div id="spinner" class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> جاري التحقق...</div>
             <p id="error-msg" style="color: #ff5252; margin-top: 15px; font-weight: bold;"></p>
         </div>
@@ -90,29 +83,88 @@
             <div class="main-title">فالنجمع الخيرين معا </div>
             <div class="signature">Designed by Dr.Chouidira Mohamed</div>
         </header>
+
+        <div class="countdown-container">
+            <div style="margin-bottom:5px; color:var(--gold)">الموعد الرسمي: 21 ماي 2026</div>
+            <div class="timer-display" id="countdown">
+                <div class="time-unit">-- <span>يوم</span></div>
+                <div class="time-unit">-- <span>ساعة</span></div>
+                <div class="time-unit">-- <span>دقيقة</span></div>
+            </div>
         </div>
+
+        <section class="problems-section">
+            <div class="section-title"><i class="fas fa-lightbulb"></i> حلول للمشاكل الشائعة</div>
+            <div class="icon-grid">
+                <div class="problem-card" onclick="showAdvice('stress')"><i class="fas fa-heartbeat"></i><span>قلق الامتحان</span></div>
+                <div class="problem-card" onclick="showAdvice('focus')"><i class="fas fa-distracted"></i><span>ضعف التركيز</span></div>
+                <div class="problem-card" onclick="showAdvice('forget')"><i class="fas fa-brain"></i><span>النسيان</span></div>
+                <div class="problem-card" onclick="showAdvice('lazy')"><i class="fas fa-couch"></i><span>الكسل</span></div>
+                <div class="problem-card" onclick="showAdvice('time')"><i class="fas fa-clock"></i><span>إدارة الوقت</span></div>
+                <div class="problem-card" onclick="showAdvice('fear')"><i class="fas fa-ghost"></i><span>الخوف من الرسوب</span></div>
+            </div>
+            <div id="adviceDisplay" class="advice-box">اضغط على أحد الأيقونات أعلاه لعرض الحل المقترح ...</div>
+        </section>
+
+        <section class="exam-section">
+            <div class="section-title"><i class="fas fa-file-alt"></i> قاعة الامتحانات</div>
+            <div class="controls">
+                <select id="subjectSelect">
+                    <option value="math">الرياضيات</option>
+                    <option value="science">العلوم الطبيعية</option>
+                    <option value="physics">الفيزياء</option>
+                    <option value="islamic">العلوم الإسلامية</option>
+                    <option value="civic">التربية المدنية</option>
+                    <option value="french">اللغة الفرنسية</option>
+                    <option value="english">اللغة الإنجليزية</option>
+                    <option value="arabic">اللغة العربية</option>
+                    <option value="history">الاجتماعيات</option>
+                </select>
+                <button class="btn-main" onclick="generateExam()">توليد الامتحان</button>
+            </div>
+
+            <div id="examContainer">
+                <div style="text-align:center; padding:40px; color:#666;">
+                    <i class="fas fa-graduation-cap" style="font-size:3rem; margin-bottom:10px;"></i>
+                    <p>اختر المادة واضغط توليد للبدء</p>
+                </div>
+            </div>
+
+            <div id="evaluationArea" class="eval-area">
+                <label>تقييمك للأداء (من 10):</label>
+                <input type="range" min="1" max="10" value="5" style="width:100%; accent-color: var(--gold)" oninput="this.nextElementSibling.value = this.value">
+                <output>5</output>
+                <br><br>
+                <label>ملاحظات الضعف للتحسين:</label>
+                <textarea id="notes" rows="3" placeholder="مثال: واجهت صعوبة في التمرين الثاني..."></textarea>
+                <button class="btn-main" style="width:100%; margin-top:10px;" onclick="saveEval()">حفظ التقرير</button>
+            </div>
+        </section>
+    </div>
 
     <script>
         const API_URL = "https://sheetdb.io/api/v1/t3mym6k81l33y";
 
+        // التحقق عند فتح الصفحة
         window.onload = function() {
-            if (localStorage.getItem('app_verified') === 'true') {
+            if (localStorage.getItem('app_activated_securely') === 'true') {
                 showMainContent();
             }
         };
 
-        function getDeviceID() {
-            // توليد بصمة أكثر دقة للجهاز
-            return btoa(navigator.userAgent + screen.width + screen.height).slice(0, 20);
+        // توليد بصمة فريدة للجهاز (Fingerprint)
+        function generateDeviceFingerprint() {
+            const info = navigator.userAgent + screen.width + navigator.language;
+            return btoa(info).slice(0, 20); // رمز فريد يعتمد على مواصفات الجهاز
         }
 
-        async function validateCode() {
+        async function validateAndLock() {
             const codeInput = document.getElementById('activationCode').value.trim();
             const errorMsg = document.getElementById('error-msg');
             const spinner = document.getElementById('spinner');
 
             if (!codeInput) {
-                errorMsg.innerText = "يرجى إدخال الكود";
+                errorMsg.innerText = "يرجى إدخال الكود أولاً";
                 return;
             }
 
@@ -120,64 +172,66 @@
             spinner.style.display = "block";
 
             try {
-                // طلب الكود المحدد فقط من SheetDB لزيادة الدقة
+                // 1. البحث عن الكود في SheetDB
                 const response = await fetch(`${API_URL}/search?code=${codeInput}`);
-                const results = await response.json();
+                const data = await response.json();
                 
-                if (results.length > 0) {
-                    const record = results[0];
-                    const currentDevice = getDeviceID();
+                if (data.length > 0) {
+                    const record = data[0];
+                    const currentDeviceID = generateDeviceFingerprint();
 
-                    // 1. استثناء أكواد المسؤول (Admin)
+                    // 2. معالجة أكواد المسؤول (Admin)
                     if (codeInput.includes("MASTER-2026") || codeInput.includes("ROOT-88")) {
                         grantAccess();
                         return;
                     }
 
-                    // 2. التحقق: هل الكود فارغ (جديد)؟
+                    // 3. التحقق: هل الكود جديد (غير مستخدم)؟
                     if (!record.status || record.status === "" || record.status === "active") {
-                        // تحديث الشيت ببصمة الجهاز الحالية فوراً
-                        const updateResponse = await fetch(`${API_URL}/code/${codeInput}`, {
+                        
+                        // قفل الكود على هذا الجهاز فوراً (تحديث الحقل status ببصمة الجهاز)
+                        const lockResponse = await fetch(`${API_URL}/code/${codeInput}`, {
                             method: 'PATCH',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ "status": currentDevice })
+                            body: JSON.stringify({ "status": currentDeviceID })
                         });
 
-                        if (updateResponse.ok) {
+                        if (lockResponse.ok) {
                             grantAccess();
                         } else {
-                            errorMsg.innerText = "خطأ في تسجيل التفعيل. حاول مجدداً.";
+                            errorMsg.innerText = "فشل تسجيل الجهاز في القاعدة.";
                         }
                     } 
-                    // 3. التحقق: هل بصمة الجهاز المسجلة تطابق الجهاز الحالي؟
-                    else if (record.status === currentDevice) {
+                    // 4. التحقق: هل هذا هو نفس الجهاز الذي فعل الكود أول مرة؟
+                    else if (record.status === currentDeviceID) {
                         grantAccess();
                     } 
-                    // 4. الكود مستخدم من قبل جهاز آخر
                     else {
-                        errorMsg.innerText = "عذراً! هذا الكود تم تفعيله مسبقاً على جهاز آخر.";
+                        // الكود مستخدم من قبل جهاز آخر
+                        errorMsg.innerText = "خطأ: هذا الكود مفعل مسبقاً على جهاز آخر!";
                     }
                 } else {
-                    errorMsg.innerText = "الكود الذي أدخلته غير موجود.";
+                    errorMsg.innerText = "الكود غير صحيح، يرجى التأكد.";
                 }
             } catch (e) {
-                errorMsg.innerText = "خطأ في الاتصال بالقاعدة. تأكد من الإنترنت.";
-                console.error(e);
+                errorMsg.innerText = "خطأ في الاتصال بالإنترنت.";
             } finally {
                 spinner.style.display = "none";
             }
         }
 
         function grantAccess() {
-            localStorage.setItem('app_verified', 'true');
+            localStorage.setItem('app_activated_securely', 'true');
             showMainContent();
         }
 
         function showMainContent() {
             document.getElementById('activation-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
+            // إذا كان هناك دوال تحتاج تشغيل عند البدء في script.js يمكن استدعاؤها هنا
         }
     </script>
+
     <script src="script.js"></script>
 </body>
 </html>
